@@ -20,33 +20,35 @@ public class TaskDao {
         jdbcTemplate.execute(sql);
     }
 
-    // Уязвимый метод для поиска задач - SQL инъекция
+    //
     public List<Task> findTasksByTitle(String title) {
         String sql = "SELECT id, title, description, completed FROM tasks WHERE title LIKE '" + title + "%'";
         RowMapper<Task> rowMapper = new TaskRowMapper();
-        return jdbcTemplate.query(sql, rowMapper);
+        return jdbcTemplate.query(sql, rowMapper, title + "%");
     }
 
-    // Безопасный метод для получения всех задач
+    public List<Task> findTasksByTitleCool(String title) {
+        String sql = "SELECT id, title, description, completed FROM tasks WHERE title LIKE ?";
+        RowMapper<Task> rowMapper = new TaskRowMapper();
+        return jdbcTemplate.query(sql, rowMapper, title + "%");
+    }
+
     public List<Task> findAllTasks() {
         String sql = "SELECT id, title, description, completed FROM tasks";
         RowMapper<Task> rowMapper = new TaskRowMapper();
         return jdbcTemplate.query(sql, rowMapper);
     }
 
-    // Безопасный метод для добавления задачи
     public void saveTask(Task task) {
         String sql = "INSERT INTO tasks (title, description, completed) VALUES (?, ?, ?)";
         jdbcTemplate.update(sql, task.getTitle(), task.getDescription(), task.isCompleted());
     }
 
-    // Безопасный метод для обновления задачи
     public void updateTask(Task task) {
         String sql = "UPDATE tasks SET title = ?, description = ?, completed = ? WHERE id = ?";
         jdbcTemplate.update(sql, task.getTitle(), task.getDescription(), task.isCompleted(), task.getId());
     }
 
-    // Безопасный метод для удаления задачи
     public void deleteTask(Long id) {
         String sql = "DELETE FROM tasks WHERE id = ?";
         jdbcTemplate.update(sql, id);

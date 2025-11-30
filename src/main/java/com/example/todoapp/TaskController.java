@@ -17,7 +17,7 @@ public class TaskController {
         return taskService.getAllTasks();
     }
 
-    // Уязвимый эндпоинт - поиск по названию с SQL инъекцией
+    //
     @GetMapping("/search")
     public List<Task> searchTasks(@RequestParam String title) {
         return taskService.findTasksByTitle(title);

@@ -16,7 +16,7 @@ public class TaskService {
     }
 
     public List<Task> findTasksByTitle(String title) {
-        return taskDao.findTasksByTitle(title);
+        return taskDao.findTasksByTitleCool(title);
     }
 
     public void addTask(Task task) {
